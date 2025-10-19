@@ -1,19 +1,9 @@
-import { OutputListener } from "./output.js";
+import { OutputListener } from ".";
+import type { Process, RunOptions } from "./types.ts";
 
-export interface RunOptions {
-	args: string[];
-}
-
-interface Process {
-	argv: string[];
-	stdout: {
-		write(text: string): void;
-	};
-}
-
-export default class CommandLine {
+export class CommandLine {
 	private readonly process: Process;
-	private readonly listener: OutputListener;
+	private readonly listener: OutputListener<string>;
 
 	public static create(): CommandLine {
 		return new CommandLine(process);

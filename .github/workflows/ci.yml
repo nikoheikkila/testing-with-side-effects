@@ -34,7 +34,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Check code formatting with Biome
-        run: bun format
+        run: bun lint
 
       - name: Run tests
         run: bun test
@@ -58,11 +58,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist
-          path: dist
 
       - name: Run test
-        working-directory: dist
         run: |
           chmod +x app
           ./app "Hello world"
-

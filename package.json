@@ -1,6 +1,6 @@
 {
 	"name": "testing-with-side-effects",
-	"module": "app.ts",
+	"module": "src/app.ts",
 	"type": "module",
 	"private": true,
 	"devDependencies": {
@@ -11,6 +11,7 @@
 		"typescript": "^5"
 	},
 	"scripts": {
+		"lint": "biome check && tsc --noEmit",
 		"format": "biome check --write",
 		"compile": "bun build --compile --outfile=dist/app cli.ts"
 	}

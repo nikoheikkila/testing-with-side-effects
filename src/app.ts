@@ -1,8 +1,8 @@
 import * as os from "node:os";
-import CommandLine from "./infrastructure/command_line.js";
-import { reverse } from "./logic/reverse.js";
+import { CommandLine } from "./adapters";
+import { reverse } from "./domain";
 
-export default class App {
+export class App {
 	private readonly commandline: CommandLine;
 
 	constructor(commandline = CommandLine.create()) {

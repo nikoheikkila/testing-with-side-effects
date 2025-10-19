@@ -1,11 +1,14 @@
 import { describe, expect, it } from "bun:test";
 import * as os from "node:os";
-import App from "./app.ts";
-import CommandLine, { type RunOptions } from "./infrastructure/command_line.ts";
-import type { OutputTracker } from "./infrastructure/output.ts";
+import {
+	CommandLine,
+	type OutputTracker,
+	type RunOptions,
+} from "../src/adapters";
+import { App } from "../src/app.ts";
 
 interface RunResult {
-	output: OutputTracker;
+	output: OutputTracker<string>;
 }
 
 describe("App", () => {

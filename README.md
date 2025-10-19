@@ -44,13 +44,19 @@ This project demonstrates an alternative approach that:
 The project follows a clean architecture pattern with clear separation of concerns:
 
 ```
-├── app.ts                    # Main application class
-├── app.test.ts              # Application tests
-├── infrastructure/          # External dependencies
-│   ├── command_line.ts      # Command line interface abstraction
-│   └── output.ts           # Output tracking and emission
-└── logic/                  # Pure business logic
-    └── reverse.ts          # String reversal logic
+├── cli.ts                   # Command line entry point
+├── src/
+│   ├── app.ts              # Main application class
+│   ├── adapters/           # External dependencies (infrastructure)
+│   │   ├── command_line.ts # Command line interface abstraction
+│   │   ├── output.ts       # Output tracking and emission
+│   │   ├── types.ts        # Adapter type definitions
+│   │   └── index.ts        # Adapter exports
+│   └── domain/             # Pure business logic
+│       ├── reverse.ts      # String reversal logic
+│       └── index.ts        # Domain exports
+└── tests/
+    └── app.test.ts         # Application tests
 ```
 
 ### Key Design Patterns
@@ -58,7 +64,8 @@ The project follows a clean architecture pattern with clear separation of concer
 1. **Dependency Injection**: The `App` class receives its dependencies through constructor injection
 2. **Test Doubles**: `CommandLine.createNull()` provides a test-specific implementation
 3. **Observer Pattern**: Output tracking using event emitters for test verification
-4. **Separation of Concerns**: Business logic is separate from infrastructure concerns
+4. **Hexagonal Architecture**: Domain logic is separated from adapters (infrastructure concerns)
+5. **Separation of Concerns**: Clear separation between domain logic, adapters, and tests
 
 ## Prerequisites
 
@@ -115,8 +122,10 @@ The tests demonstrate several key principles:
 #### 1. Dependency Injection for Testability
 
 ```typescript
-constructor(commandline = CommandLine.create()) {
-  this.commandline = commandline;
+class App {
+   constructor(commandline = CommandLine.create()) {
+     this.commandline = commandline;
+   }
 }
 ```
 
@@ -141,7 +150,7 @@ Instead of mocking, we use `CommandLine.createNull()` which provides a test-spec
 #### 3. Output Tracking with Observer Pattern
 
 ```typescript
-export class OutputTracker {
+class OutputTracker {
   public readonly data: string[];
 
   private readonly emitter: EventEmitter;

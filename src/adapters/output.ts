@@ -1,18 +1,18 @@
 import EventEmitter from "node:events";
 
-export class OutputListener {
+export class OutputListener<T> {
 	private static readonly event: string = "event";
 	private readonly emitter: EventEmitter;
 
-	public static create() {
-		return new OutputListener();
+	public static create<T>(): OutputListener<T> {
+		return new OutputListener<T>();
 	}
 
-	public trackOutput() {
+	public trackOutput(): OutputTracker<T> {
 		return new OutputTracker(this.emitter, OutputListener.event);
 	}
 
-	public emit(data: unknown) {
+	public emit(data: T) {
 		this.emitter.emit(OutputListener.event, data);
 	}
 
@@ -21,19 +21,21 @@ export class OutputListener {
 	}
 }
 
-export class OutputTracker {
-	public readonly data: string[];
+export class OutputTracker<T> {
+	public readonly data: T[];
 
 	private readonly emitter: EventEmitter;
 	private readonly event: string;
-	private readonly trackerFn: (text: string) => void;
 
 	public constructor(emitter: EventEmitter, event: string) {
 		this.emitter = emitter;
 		this.event = event;
 		this.data = [];
 
-		this.trackerFn = (text: string) => this.data.push(text);
-		this.emitter.on(this.event, this.trackerFn);
+		this.register();
+	}
+
+	private register() {
+		this.emitter.on(this.event, (entry: T) => this.data.push(entry));
 	}
 }
