@@ -11,20 +11,28 @@ interface RunResult {
 	output: OutputTracker<string>;
 }
 
-describe("App", () => {
-	it("reads command-line argument, executes it with shell, and writes result", () => {
+describe("App (unit)", () => {
+	it("return usage hint without input", () => {
+		const { output } = run({ args: [] });
+
+		expect(output.data).toStrictEqual([`Usage: run <text>${os.EOL}`]);
+	});
+
+	it("retains empty input", () => {
+		const input = "";
+
+		const { output } = run({ args: [input] });
+
+		expect(output.data).toStrictEqual([os.EOL]);
+	});
+
+	it("reverses normal string", () => {
 		const input = "Hello";
 		const expectedOutput = "olleH";
 
 		const { output } = run({ args: [input] });
 
 		expect(output.data).toStrictEqual([expectedOutput + os.EOL]);
-	});
-
-	it("writes usage when no arguments provided", () => {
-		const { output } = run({ args: [] });
-
-		expect(output.data).toStrictEqual([`Usage: run <text>${os.EOL}`]);
 	});
 
 	it("complains when too many arguments provided", () => {

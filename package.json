@@ -5,7 +5,8 @@
 	"private": true,
 	"devDependencies": {
 		"@biomejs/biome": "2.2.6",
-		"@types/bun": "latest"
+		"@types/bun": "latest",
+		"zx": "^8.8.4"
 	},
 	"peerDependencies": {
 		"typescript": "^5"

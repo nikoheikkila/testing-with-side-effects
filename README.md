@@ -56,7 +56,8 @@ The project follows a clean architecture pattern with clear separation of concer
 │       ├── reverse.ts      # String reversal logic
 │       └── index.ts        # Domain exports
 └── tests/
-    └── app.test.ts         # Application tests
+    ├── app.test.ts         # Unit tests
+    └── app.spec.ts         # Integration tests
 ```
 
 ### Key Design Patterns
@@ -109,10 +110,22 @@ too many arguments
 
 ## Testing
 
+The project includes both unit tests and integration tests to demonstrate different testing strategies:
+
+- **Unit tests** (`tests/app.test.ts`) - Test individual components using dependency injection and test doubles
+- **Integration tests** (`tests/app.spec.ts`) - Test the complete application end-to-end using the [zx](https://github.com/google/zx) library
+
 ### Running Tests
 
 ```bash
+# Run all tests
 bun test
+
+# Run only unit tests
+bun test app.test.ts
+
+# Run only integration tests
+bun test app.spec.ts
 ```
 
 ### Test Architecture
@@ -169,6 +182,15 @@ class OutputTracker {
 ```
 
 Output is tracked using an event-based system that allows tests to verify what was written without mocking stdout.
+
+#### 4. End-to-End Integration Testing
+
+Integration tests use the [zx](https://github.com/google/zx) library to execute the actual CLI application as a child process. This provides:
+
+- **Full end-to-end validation** by testing the complete application stack
+- **Real process execution** without mocking the command line interface
+- **Actual stdout/stderr capture** for comprehensive output verification
+- **Exit code validation** to ensure proper application behavior
 
 ## Learning Objectives
 
